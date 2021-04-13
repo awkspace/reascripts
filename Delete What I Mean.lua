@@ -44,7 +44,7 @@ cur_pos = reaper.GetCursorPosition()
 if reaper.SNM_GetIntConfigVar("projripedit", -666) == 1 then
 
   if reaper.GetPlayState() == 1 then
-    if cur_pos > start_time - buffer then
+    if cur_pos > start_time - rewind_buffer then
       reaper.SetEditCurPos(start_time - rewind_buffer, true, true)
       reaper.SetEditCurPos(cur_pos, false, false)
     end
