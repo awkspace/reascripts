@@ -40,8 +40,9 @@ if start_time ~= end_time then
     -- Try to guess what track this delete should refer to
     i = 0
     while (i < reaper.CountSelectedMediaItems()) do
-      item = reaper.GetSelectedMediaItem(0,i)
       deselect = false
+
+      item = reaper.GetSelectedMediaItem(0,i)
       -- Deselect if muted
       if reaper.GetMediaItemInfo_Value(item, "B_MUTE") == 1 then
         deselect = true
@@ -50,6 +51,16 @@ if start_time ~= end_time then
       if reaper.GetActiveTake(item) == nil then
         deselect = true
       end
+
+      track = reaper.GetMediaItem_Track(item)
+      -- Deselect if track muted
+      if reaper.GetMediaTrackInfo_Value(track, "B_MUTE") == 1 then
+        deselect = true
+      end
+      if reaper.AnyTrackSolo() and reaper.GetMediaTrackInfo_Value(track, "I_SOLO") == 0 then
+        deselect = true
+      end
+
       -- Perform deselect
       if deselect then
         reaper.SetMediaItemInfo_Value(item, "B_UISEL", 0)
@@ -66,7 +77,7 @@ if start_time ~= end_time then
       end
     end
 
-    if tracks_to_modify > 1 then
+    if tracks_to_modify > 1 and not reaper.AnyTrackSolo() then
       -- No reasonable guess could be made. Restore previous selections
       reaper.SelectAllMediaItems(0,0)
       for idx, selection in pairs(sel_items) do
