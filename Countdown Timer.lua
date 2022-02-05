@@ -21,4 +21,10 @@ function main()
   reaper.defer(main)
 end
 
+function reset()
+  reaper.SNM_SetDoubleConfigVar("projtimeoffs", 0)
+  reaper.UpdateTimeline()
+end
+
+reaper.atexit(reset)
 main()
