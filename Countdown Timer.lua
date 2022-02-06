@@ -10,9 +10,10 @@ function main()
 end
 
 function reset()
-  reaper.SNM_SetDoubleConfigVar("projtimeoffs", 0)
+  reaper.SNM_SetDoubleConfigVar("projtimeoffs", orig_offset)
   reaper.UpdateTimeline()
 end
 
+orig_offset = reaper.SNM_GetDoubleConfigVar("projtimeoffs", -1)
 reaper.atexit(reset)
 main()
