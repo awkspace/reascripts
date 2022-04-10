@@ -58,6 +58,9 @@ if start_time ~= end_time then
       if reaper.AnyTrackSolo() and reaper.GetMediaTrackInfo_Value(track, "I_SOLO") == 0 then
         deselect = true
       end
+      if not reaper.AnyTrackSolo() and not reaper.IsTrackSelected(track) then
+        deselect = true
+      end
 
       -- Perform deselect
       if deselect then
@@ -75,7 +78,8 @@ if start_time ~= end_time then
       end
     end
 
-    if tracks_to_modify > 1 and not reaper.AnyTrackSolo() then
+
+    if tracks_to_modify > 1 and not reaper.AnyTrackSolo() and reaper.CountSelectedTracks() == 0 then
       -- No reasonable guess could be made. Restore previous selections
       reaper.SelectAllMediaItems(0,0)
       for idx, selection in pairs(sel_items) do
